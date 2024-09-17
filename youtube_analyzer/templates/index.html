@@ -9,10 +9,17 @@
     <h1>Welcome to YouTube History Analyzer</h1>
     <p>Before using the tool, please follow the <a href="/instructions">instructions</a> to download your YouTube history data.</p>
     <p>Once you've obtained the JSON file, you can upload it below:</p>
-    <form action="/upload" method="POST" enctype="multipart/form-data">
-        <input title="fileInput" type="file" name="file" accept=".json">
+    
+    <!-- File upload form -->
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input id="fileInput" title="fileInput" type="file" name="file" accept=".json">
         <button type="submit">Upload</button>
     </form>
+    
+    <!-- Button to clear local storage -->
+    <button id="clearStorage">Clear Stored Data</button>
+    
+    <!-- Display any flashed messages -->
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         <ul>
@@ -22,5 +29,95 @@
         </ul>
       {% endif %}
     {% endwith %}
+    
+    <!-- Display stored files from localStorage -->
+    <h2>Uploaded File</h2>
+    <ul id="storedFiles"></ul>
+    
+    <!-- Display download link for processed file -->
+    <h2>Processed File</h2>
+    <div id="downloadLinkContainer"></div>
+
+    <script>
+        // Handle file upload and store in localStorage
+        document.getElementById('uploadForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (file && file.name === 'watch-history.json') {  // Only allow watch-history.json
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const fileContent = e.target.result;
+                    try {
+                        // Store the JSON content as a string in localStorage
+                        localStorage.setItem('watchHistory', fileContent);
+
+                        // Send the file to the backend
+                        const formData = new FormData();
+                        formData.append('file', file);
+
+                        fetch('/upload', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.download_url) {
+                                displayDownloadLink(data.download_url);
+                            } else {
+                                alert('File processed but download link not found.');
+                            }
+                        })
+                        .catch(error => console.error('Error uploading file:', error));
+
+                        displayStoredFiles();
+                    } catch (e) {
+                        console.error('Error storing file in LocalStorage:', e);
+                    }
+                };
+
+                reader.readAsText(file);  // Read file as text (string)
+            } else {
+                alert('Please upload a valid watch-history.json file.');
+            }
+        });
+
+        // Clear stored data from localStorage
+        document.getElementById('clearStorage').addEventListener('click', function () {
+            localStorage.removeItem('watchHistory');
+            alert('Stored data cleared successfully.');
+            displayStoredFiles();
+            clearDownloadLink();
+        });
+
+        // Display stored files in localStorage
+        function displayStoredFiles() {
+            const storedFilesList = document.getElementById('storedFiles');
+            storedFilesList.innerHTML = '';
+            const storedData = localStorage.getItem('watchHistory');
+            if (storedData) {
+                const listItem = document.createElement('li');
+                listItem.textContent = 'watch-history.json';
+                storedFilesList.appendChild(listItem);
+            }
+        }
+
+        // Display download link for processed file
+        function displayDownloadLink(url) {
+            const container = document.getElementById('downloadLinkContainer');
+            container.innerHTML = `<a href="${url}" download="watch_history_processed.csv">Download Processed File</a>`;
+        }
+
+        // Clear download link
+        function clearDownloadLink() {
+            const container = document.getElementById('downloadLinkContainer');
+            container.innerHTML = '';
+        }
+
+        // Initialize file list display
+        displayStoredFiles();
+    </script>
 </body>
 </html>
