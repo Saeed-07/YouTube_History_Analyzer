@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube History Analyzer</title>
+</head>
+<body>
+    <h1>Welcome to YouTube History Analyzer</h1>
+    <p>Before using the tool, please follow the <a href="/instructions">instructions</a> to download your YouTube history data.</p>
+    <p>Once you've obtained the JSON file, you can upload it below:</p>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input title="fileInput" type="file" name="file" accept=".json">
+        <button type="submit">Upload</button>
+    </form>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+</body>
+</html>
