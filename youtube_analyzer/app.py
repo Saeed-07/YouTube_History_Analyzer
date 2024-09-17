@@ -1,9 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, send_file, jsonify
+from flask import Flask, render_template, request, redirect, url_for, send_file, jsonify
 import os
 import subprocess
 
 app = Flask(__name__)
-app.secret_key = "supersecretkey"  # For flashing messages
 
 # Set upload and processed folders
 UPLOAD_FOLDER = 'uploads/'
@@ -37,13 +36,11 @@ def instructions():
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
-        flash('No file part')
         return redirect(request.url)
 
     file = request.files['file']
     
     if file.filename == '':
-        flash('No selected file')
         return redirect(request.url)
     
     if file and file.filename == 'watch-history.json':
@@ -74,26 +71,21 @@ def upload_file():
                 missing_plots = [plot for plot in REQUIRED_PLOTS if plot not in eda_output_files]
 
                 if not missing_plots:
-                    flash('EDA completed successfully. Plots are ready.')
                     return jsonify({
                         'message': 'File processed and EDA completed successfully',
                         'download_url': url_for('download_processed_file', filename='watch_history_processed.csv'),
                         'eda_plots_url': url_for('show_eda_plots')
                     })
                 else:
-                    flash(f'EDA failed or incomplete. Missing plots: {", ".join(missing_plots)}.')
                     return redirect(url_for('index'))
 
             else:
-                flash('Processed file not found')
                 return redirect(url_for('index'))
 
         except Exception as e:
-            flash(f'Error processing file: {e}')
             return redirect(request.url)
 
     else:
-        flash('Only watch-history.json files are allowed')
         return redirect(request.url)
 
 @app.route('/eda_plots')
@@ -108,7 +100,6 @@ def show_eda_plots():
     if available_plots:
         return render_template('eda_plots.html', plot_files=available_plots)
     else:
-        flash('No EDA plots available. Please run the analysis again.')
         return redirect(url_for('index'))
 
 @app.route('/processed/<filename>')
