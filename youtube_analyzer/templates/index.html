@@ -4,21 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube History Analyzer</title>
+    <style>
+        /* Add some padding around the images */
+        .image-container {
+            margin: 20px;
+            padding: 30px;
+            box-sizing: border-box; /* Ensure padding is included in total width */
+            overflow: auto; /* Allows scroll if image is larger than container */
+        }
+
+        /* Ensure the image width adjusts correctly while maintaining aspect ratio */
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            display: block; /* Removes extra space below the image */
+        }
+    </style>
 </head>
 <body>
     <h1>Welcome to YouTube History Analyzer</h1>
     <p>Before using the tool, please follow the <a href="/instructions">instructions</a> to download your YouTube history data.</p>
     <p>Once you've obtained the JSON file, you can upload it below:</p>
-    
+
     <!-- File upload form -->
     <form id="uploadForm" enctype="multipart/form-data">
         <input id="fileInput" title="fileInput" type="file" name="file" accept=".json">
         <button type="submit">Upload</button>
     </form>
-    
+
     <!-- Button to clear local storage -->
     <button id="clearStorage">Clear Stored Data</button>
-    
+
     <!-- Display any flashed messages -->
     {% with messages = get_flashed_messages() %}
       {% if messages %}
@@ -29,14 +45,42 @@
         </ul>
       {% endif %}
     {% endwith %}
-    
+
     <!-- Display stored files from localStorage -->
     <h2>Uploaded File</h2>
     <ul id="storedFiles"></ul>
-    
+
     <!-- Display download link for processed file -->
     <h2>Processed File</h2>
     <div id="downloadLinkContainer"></div>
+
+    <!-- EDA Results Section (initially hidden) -->
+    <h2 id="edaSectionTitle" style="display: none;">EDA Results</h2>
+    <div id="edaResults" class="image-container" style="display: none;">
+        <h3>Top Watched Channels</h3>
+        <img id="topWatchedChannels" src="" alt="Top Watched Channels">
+
+        <h3>Top Watched Videos</h3>
+        <img id="topWatchedVideos" src="" alt="Top Watched Videos">
+
+        <h3>Views by Day</h3>
+        <img id="viewsByDay" src="" alt="Views by Day">
+
+        <h3>Views by Hour</h3>
+        <img id="viewsByHour" src="" alt="Views by Hour">
+
+        <h3>Views by Month</h3>
+        <img id="viewsByMonth" src="" alt="Views by Month">
+
+        <h3>Views by Year</h3>
+        <img id="viewsByYear" src="" alt="Views by Year">
+
+        <h3>Watch Time per Weekday</h3>
+        <img id="watchTimePerWeekday" src="" alt="Watch Time per Weekday">
+
+        <h3>Watch Time per Hour</h3>
+        <img id="watchTimePerHour" src="" alt="Watch Time per Hour">
+    </div>
 
     <script>
         // Handle file upload and store in localStorage
@@ -66,6 +110,9 @@
                         .then(data => {
                             if (data.download_url) {
                                 displayDownloadLink(data.download_url);
+                                if (data.eda_plots_url) {
+                                    displayEdaResults();
+                                }
                             } else {
                                 alert('File processed but download link not found.');
                             }
@@ -90,6 +137,7 @@
             alert('Stored data cleared successfully.');
             displayStoredFiles();
             clearDownloadLink();
+            clearEdaResults();
         });
 
         // Display stored files in localStorage
@@ -116,8 +164,29 @@
             container.innerHTML = '';
         }
 
+        // Display EDA results
+        function displayEdaResults() {
+            document.getElementById('edaSectionTitle').style.display = 'block';
+            document.getElementById('edaResults').style.display = 'block';
+
+            // Set image sources dynamically based on plot file names
+            document.getElementById('topWatchedChannels').src = '../static/eda_plots/top_watched_channels.png';
+            document.getElementById('topWatchedVideos').src = '../static/eda_plots/top_watched_videos.png';
+            document.getElementById('viewsByDay').src = '../static/eda_plots/views_by_day.png';
+            document.getElementById('viewsByHour').src = '../static/eda_plots/views_by_hour.png';
+            document.getElementById('viewsByMonth').src = '../static/eda_plots/views_by_month.png';
+            document.getElementById('viewsByYear').src = '../static/eda_plots/views_by_year.png';
+            document.getElementById('watchTimePerWeekday').src = '../static/eda_plots/watchtime_per_day.png';
+            document.getElementById('watchTimePerHour').src = '../static/eda_plots/watchtime_per_hour.png';
+        }
+
+        // Clear EDA results
+        function clearEdaResults() {
+            document.getElementById('edaSectionTitle').style.display = 'none';
+            document.getElementById('edaResults').style.display = 'none';
+        }
+
         // Initialize file list display
         displayStoredFiles();
     </script>
-</body>
-</html>
+</bodystatic/
