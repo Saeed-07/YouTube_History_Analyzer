@@ -3,21 +3,16 @@ import pandas as pd
 import sys
 
 def process_watch_history(input_file, output_file):
-    # Load the JSON data
     with open(input_file, 'r', encoding='utf-8') as file:
         data = json.load(file)
     
-    # Normalize JSON data into DataFrame
     df = pd.json_normalize(data)
     
-    # Drop unnecessary columns
     columns_to_drop = ['header', 'products', 'description', 'details']
     df = df.drop(columns=[col for col in columns_to_drop if col in df], axis=1)
 
-    # Filter out specific activity controls
     df = df[~df['activityControls'].apply(lambda x: 'Web & App Activity' in x)]
 
-    # Clean and transform data
     df['title'] = df['title'].str.replace('^Watched ', '', regex=True)
     df = df[df['subtitles'].apply(lambda x: isinstance(x, list) and len(x) > 0)]
     df['channel_name'] = df['subtitles'].apply(
@@ -40,10 +35,8 @@ def process_watch_history(input_file, output_file):
     df['hour'] = df['time'].dt.hour
     df['minute'] = df['time'].dt.minute
 
-    # Drop unnecessary columns
     df = df.drop(['activityControls'], axis=1)
 
-    # Save the processed data to a CSV file
     df_out = df
     df_out.to_csv(output_file, index=False)
 

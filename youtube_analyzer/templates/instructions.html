@@ -5,17 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instructions to Download YouTube History</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4; 
+            color: #333;
+            margin: 20px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4a90e2;
+        }
+
+        ul {
+            list-style-type: none; 
+            padding-left: 0; 
+            max-width: 800px;
+            margin: 0 auto; 
+        }
+
+        li {
+            margin-bottom: 30px;
+        }
+
+        p {
+            text-align: center;
+        }
+
         img {
-            width: 800px; /* Adjust as needed */
-            height: auto;  /* Maintain aspect ratio */
+            width: 100%; 
+            max-width: 800px;
+            height: auto; 
             display: block;
-            margin: 30px 0; /* Add some space between images and text */
+            margin: 20px auto;
+        }
+
+        a {
+            color: #4a90e2;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <h1>Instructions to Download YouTube History Data</h1>
-    <ol>
+    <ul>
         <li>Go to <a href="https://takeout.google.com" target="_blank" rel="noopener">Google Takeout</a> and <b>sign in</b> with your Google account.<br>
             <img src="{{ url_for('static', filename='screenshots/step1.png') }}" alt="Step 1">
         </li>
@@ -25,48 +63,31 @@
         <li>Scroll down to <b>"YouTube and YouTube Music"</b> and select it.<br>
             <img src="{{ url_for('static', filename='screenshots/step3.png') }}" alt="Step 3">
         </li>
-        <li>
-            <ul>
-                <li>Select <b>"All YouTube data included"</b> (if present, otherwise skip).<br>
-                    <img src="{{ url_for('static', filename='screenshots/step4_1.png') }}" alt="Step 4a">
-                </li>
-                <li>Deselect all options.<br>
-                    <img src="{{ url_for('static', filename='screenshots/step4_2.png') }}" alt="Step 4b">
-                </li>
-                <li>Select <b>"history"</b> and click "Ok".<br>
-                    <img src="{{ url_for('static', filename='screenshots/step4_3.png') }}" alt="Step 4c">
-                </li>
-            </ul>
+        <li>Select <b>"All YouTube data included"</b> (if present, otherwise skip).<br>
+            <img src="{{ url_for('static', filename='screenshots/step4_1.png') }}" alt="Step 4_1">
+            Deselect all options.<br>
+            <img src="{{ url_for('static', filename='screenshots/step4_2.png') }}" alt="Step 4_2">
+            Select <b>"history"</b> and click "Ok".<br>
+            <img src="{{ url_for('static', filename='screenshots/step4_3.png') }}" alt="Step 4_3">
         </li>
-        <li>
-            <ul>
-                <li>Click on <b>"Multiple formats"</b>.<br>
-                    <img src="{{ url_for('static', filename='screenshots/step5_1.png') }}" alt="Step 5a">
-                </li>
-                <li>Scroll down to <b>"history"</b>.<br>
-                    <img src="{{ url_for('static', filename='screenshots/step5_2.png') }}" alt="Step 5b">
-                </li>
-                <li>Change the file format to <b>JSON</b> and click "Ok".<br>
-                    <img src="{{ url_for('static', filename='screenshots/step5_3.png') }}" alt="Step 5c">
-                </li>
-            </ul>
+        <li>Click on <b>"Multiple formats"</b>.<br>
+            <img src="{{ url_for('static', filename='screenshots/step5_1.png') }}" alt="Step 5_1">
+            Scroll down to <b>"history"</b>.<br>
+            <img src="{{ url_for('static', filename='screenshots/step5_2.png') }}" alt="Step 5_2">
+            Change the file format to <b>JSON</b> and click "Ok".<br>
+            <img src="{{ url_for('static', filename='screenshots/step5_3.png') }}" alt="Step 5_3">
         </li>
-        <li>Click on <b>"Next Step"</b>.</li><br><br>
-        <li>
-            <ul>
-                <li>Select <b>"Send download link via email"</b> in the Transfer to option.<br>
-                    <img src="{{ url_for('static', filename='screenshots/step6_1.png') }}" alt="Step 6a">
-                </li>
-                <li>Keep the other options default and click on <b>"Create export"</b>. You will receive an email containing your data (usually within 5-10 minutes).<br>
-                    <img src="{{ url_for('static', filename='screenshots/step6_2.png') }}" alt="Step 6b">
-                </li>
-            </ul>
+        <li>Click on <b>"Next Step"</b>.</li>
+        <li>Select <b>"Send download link via email"</b> in the Transfer to option.<br>
+            <img src="{{ url_for('static', filename='screenshots/step6_1.png') }}" alt="Step 6_1">
+            Keep the other options default and click on <b>"Create export"</b>. You will receive an email containing your data (usually within 5-10 minutes).<br>
+            <img src="{{ url_for('static', filename='screenshots/step6_2.png') }}" alt="Step 6_2">
         </li>
         <li>In the email, click on <b>"Download your files,"</b> sign in to your account, and download the data.<br>
             <img src="{{ url_for('static', filename='screenshots/step7.png') }}" alt="Step 7">
         </li>
         <li><b>Extract</b> the `.zip` file and upload the <b>`watch-history.json`</b> file.</li>
-    </ol>
+    </ul>
     <p>After downloading the file, go back to the <a href="/">home</a> to upload the JSON file.</p>
 </body>
 </html>
