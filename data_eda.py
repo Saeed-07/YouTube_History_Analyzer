@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 import pandas as pd
 import sys
 import matplotlib.pyplot as plt
@@ -17,20 +14,18 @@ df = pd.read_csv(csv_file_path)
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
 
-# Daily view patterns
-
 # Plot views by day
 plt.figure(figsize=(12, 6))
 sns.countplot(data=df, x='day', hue='day', palette='viridis', legend=False)
 plt.title('Views by Day of the Month')
-plt.savefig(os.path.join(output_folder, 'views_by_day.png'))  # Save instead of show
+plt.savefig(os.path.join(output_folder, 'views_by_day.png'))
 plt.close()
 
 # Plot views by hour
 plt.figure(figsize=(12, 6))
 sns.countplot(data=df, x='hour', hue='hour', palette='viridis', legend=False)
 plt.title('Views by Hour of the Day')
-plt.savefig(os.path.join(output_folder, 'views_by_hour.png'))  # Save instead of show
+plt.savefig(os.path.join(output_folder, 'views_by_hour.png')) 
 plt.close()
 
 # Monthly & Yearly Trends
@@ -39,14 +34,14 @@ plt.close()
 plt.figure(figsize=(12, 6))
 sns.countplot(data=df, x='month_name', hue='month_name', palette='viridis', legend=False)
 plt.title('Views by Month')
-plt.savefig(os.path.join(output_folder, 'views_by_month.png'))  # Save instead of show
+plt.savefig(os.path.join(output_folder, 'views_by_month.png')) 
 plt.close()
 
 # Views per year
 plt.figure(figsize=(12, 6))
 sns.countplot(data=df, x='year', hue='year', palette='viridis', legend=False)
 plt.title('Views by Year')
-plt.savefig(os.path.join(output_folder, 'views_by_year.png'))  # Save instead of show
+plt.savefig(os.path.join(output_folder, 'views_by_year.png')) 
 plt.close()
 
 # Most Watched Channels
@@ -56,7 +51,7 @@ top_channels = df['channel_name'].value_counts().head(10)
 sns.barplot(x=top_channels.index, hue=top_channels.index, y=top_channels.values, palette='viridis', legend=False)
 plt.title('Top 10 Most Watched Channels')
 plt.xticks(rotation=20)
-plt.savefig(os.path.join(output_folder, 'top_watched_channels.png'))  # Save instead of show
+plt.savefig(os.path.join(output_folder, 'top_watched_channels.png')) 
 plt.close()
 
 # Most Watched Videos
@@ -67,7 +62,7 @@ sns.barplot(x=top_videos.index, hue=top_videos.index, y=top_videos.values, palet
 plt.title('Top 10 Most Watched Videos')
 plt.xticks(rotation=90)
 plt.tight_layout()
-plt.savefig(os.path.join(output_folder, 'top_watched_videos.png'))  # Save instead of show
+plt.savefig(os.path.join(output_folder, 'top_watched_videos.png'))
 plt.close()
 
 # Total Watch Time per Day
@@ -83,7 +78,7 @@ sns.barplot(x='weekday', y='videos_watched', hue='weekday', data=watch_time_per_
 plt.title('Videos Watched per Weekday')
 plt.xlabel('Weekday')
 plt.ylabel('Number of Videos Watched')
-plt.savefig(os.path.join(output_folder, 'watchtime_per_day.png'))  # Save instead of show
+plt.savefig(os.path.join(output_folder, 'watchtime_per_day.png')) 
 plt.close()
 
 # Watch Time by Hour
@@ -93,7 +88,7 @@ watch_time_by_hour = df.groupby('hour').size().reset_index(name='videos_watched'
 plt.figure(figsize=(10, 6))
 sns.barplot(x='hour', y='videos_watched', hue='hour', data=watch_time_by_hour, palette='viridis', legend=False)
 plt.title('Videos Watched by Hour of the Day')
-plt.savefig(os.path.join(output_folder, 'watchtime_per_hour.png'))  # Save instead of show
+plt.savefig(os.path.join(output_folder, 'watchtime_per_hour.png')) 
 plt.close()
 
 weekday_mapping = {'Monday': 0, 'Tuesday': 1, 'Wednesday': 2, 'Thursday': 3, 'Friday': 4, 'Saturday': 5, 'Sunday': 6}
@@ -104,6 +99,6 @@ correlation_matrix = df[['year', 'month', 'weekday_num', 'day', 'hour', 'minute'
 plt.figure(figsize=(10, 8))
 sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', center=0)
 plt.title('Correlation Matrix')
-plt.savefig(os.path.join(output_folder, 'correlation_matrix.png'))  # Save instead of show
+plt.savefig(os.path.join(output_folder, 'correlation_matrix.png'))
 plt.close()
 
